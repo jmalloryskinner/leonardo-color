@@ -1,14 +1,15 @@
 # Leonardo Color Theme Generator
 
-A TypeScript project for generating theme files using Adobe's Leonardo Color tools. This project allows you to define brand colors and generate theme variations (light, dark, etc.) with proper contrast ratios.
+A TypeScript project for generating theme files using Adobe's Leonardo Color tools. This project generates accessible color themes with light and dark variants following a configurable schema.
 
 ## Features
 
-- Generate theme files for multiple brands
-- Support for different environments (development, production, staging)
-- Global theme configurations (light, dark)
-- Automatic contrast ratio calculations
-- Type-safe configuration
+- Dynamic schema-based output structure
+- Multiple brand support via JSON configuration
+- Environment-specific configurations (development, production, staging)
+- Automatic light and dark theme generation
+- Type-safe configuration and output
+- Configurable property prefixes and naming
 
 ## Setup
 
@@ -29,10 +30,9 @@ project/
 │   └── staging/        # Staging environment configs
 ├── src/
 │   ├── brands/         # Brand management
-│   ├── constants/      # Global constants
+│   ├── schemas/        # Output schema configuration
 │   ├── scripts/        # Build scripts
 │   ├── services/       # Core services
-│   ├── themes/         # Theme configurations
 │   ├── types/          # TypeScript types
 │   └── utils/          # Utility functions
 └── dist/               # Generated output
@@ -43,7 +43,7 @@ project/
 
 ### Brand Configuration
 
-Create a brand configuration file in `config/development/brand-name.json`:
+Create a brand configuration in `config/development/brand-name.json`:
 
 ```json
 {
@@ -75,15 +75,32 @@ npm run generate:brands:prod    # Production
 npm run generate:brands:staging # Staging
 ```
 
-### Output
+### Output Structure
 
-Themes are generated in the `dist/themes` directory with the format:
-```
-dist/themes/
-├── brand1-light.json
-├── brand1-dark.json
-├── brand2-light.json
-└── brand2-dark.json
+Themes are generated following the schema:
+```json
+{
+  "alto": {
+    "prim": {
+      "colorScale": {
+        "blue": {
+          "100": {
+            "light": {
+              "$value": "#5CDBFF",
+              "$type": "color",
+              "$description": "3:1 against background"
+            },
+            "dark": {
+              "$value": "#0000FF",
+              "$type": "color",
+              "$description": "3:1 against background"
+            }
+          }
+        }
+      }
+    }
+  }
+}
 ```
 
 ## Development
