@@ -16,6 +16,8 @@ export interface BrandConfig {
 // Theme configuration extends brand config with theme options
 export interface ThemeConfig extends BrandConfig {
     lightness: number;
+    contrast?: number;
+    saturation?: number;
 }
 
 // Output types

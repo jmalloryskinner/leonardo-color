@@ -8,12 +8,13 @@
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "test:watch": "node --experimental-vm-modules node_modules/jest/bin/jest.js --watch",
     "generate:brands": "npm run build && node dist/scripts/generate-brand-themes.js",
-    "generate:brands:prod": "npm run build && node dist/scripts/generate-brand-themes.js --env=production",
-    "generate:brands:staging": "npm run build && node dist/scripts/generate-brand-themes.js --env=staging"
+    "generate:brands:prod": "cross-env NODE_ENV=production npm run generate:brands",
+    "generate:brands:staging": "cross-env NODE_ENV=staging npm run generate:brands"
   },
   "devDependencies": {
     "@types/jest": "^29.5.12",
     "@types/node": "^20.11.24",
+    "cross-env": "^7.0.3",
     "jest": "^29.7.0",
     "ts-jest": "^29.1.2",
     "typescript": "^5.3.3"

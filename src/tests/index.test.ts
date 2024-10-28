@@ -1,5 +1,7 @@
 import { generateThemeFile } from '../index.js';
 import { ThemeConfig, ColorConfig } from '../types/theme.js';
+import { themeSchema } from '../schemas/theme.schema.js';
+import { ColorStep } from '../types/output.js';
 import fs from 'fs';
 import path from 'path';
 
@@ -32,7 +34,7 @@ describe('Theme File Generation', () => {
         }
     });
 
-    it('should generate and save theme file', () => {
+    it('should generate theme file with correct schema structure', () => {
         const config: ThemeConfig = {
             colors: [mockColor],
             backgroundColor: mockBackground,
@@ -43,9 +45,27 @@ describe('Theme File Generation', () => {
 
         expect(fs.existsSync(testThemePath)).toBe(true);
         const fileContent = JSON.parse(fs.readFileSync(testThemePath, 'utf-8'));
-        expect(fileContent).toBeDefined();
-        expect(Array.isArray(fileContent)).toBe(true);
-        expect(fileContent[0]).toHaveProperty('background');
+        
+        // Verify schema structure
+        const [rootKey1, rootKey2] = themeSchema.structure.root;
+        expect(fileContent).toHaveProperty(rootKey1);
+        expect(fileContent[rootKey1]).toHaveProperty(rootKey2);
+        expect(fileContent[rootKey1][rootKey2]).toHaveProperty(themeSchema.structure.colorScale);
+
+        // Verify color structure
+        const colorScale = fileContent[rootKey1][rootKey2][themeSchema.structure.colorScale];
+        expect(colorScale['test-color']).toBeDefined();
+        
+        // Verify theme variants
+        const colorStep = Object.values(colorScale['test-color'])[0] as ColorStep;
+        expect(colorStep).toHaveProperty(themeSchema.structure.variants.light);
+        expect(colorStep).toHaveProperty(themeSchema.structure.variants.dark);
+
+        // Verify value format
+        const lightVariant = colorStep[themeSchema.structure.variants.light];
+        expect(lightVariant).toHaveProperty(`${themeSchema.structure.prefixes.value}value`);
+        expect(lightVariant).toHaveProperty(`${themeSchema.structure.prefixes.type}type`);
+        expect(lightVariant).toHaveProperty(`${themeSchema.structure.prefixes.description}description`);
     });
 
     it('should throw error for invalid color values', () => {

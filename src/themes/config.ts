@@ -1,17 +1,15 @@
-export interface ThemeConfig {
-    lightness: number;
-    contrast?: number;
-    saturation?: number;
-}
+import { ThemeConfig } from '../types/theme.js';
 
-export const themes: Record<string, ThemeConfig> = {
+type ThemeVariant = Pick<ThemeConfig, 'lightness' | 'contrast' | 'saturation'>;
+
+export const themes: Record<string, ThemeVariant> = {
     light: {
         lightness: 100,
         contrast: 1,
         saturation: 100
     },
     dark: {
-        lightness: 0,  // 0% lightness for dark theme
+        lightness: 0,
         contrast: 1,
         saturation: 100
     }
