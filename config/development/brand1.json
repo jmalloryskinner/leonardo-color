@@ -1,0 +1,19 @@
+{
+    "colors": [
+        {
+            "name": "blue",
+            "colorKeys": ["#5CDBFF", "#0000FF"],
+            "ratios": [3, 4.5, 7]
+        },
+        {
+            "name": "red",
+            "colorKeys": ["#FF9A81", "#FF0000"],
+            "ratios": [3, 4.5, 11]
+        }
+    ],
+    "backgroundColor": {
+        "name": "gray",
+        "colorKeys": ["#cacaca"],
+        "ratios": [2, 3, 4.5, 8]
+    }
+}
