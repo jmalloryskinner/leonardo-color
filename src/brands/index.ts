@@ -1,7 +1,7 @@
 import { Brand } from '../types/brand.js';
 import { ConfigLoader } from '../utils/configLoader.js';
 
-const loader = new ConfigLoader(process.env.NODE_ENV || 'development');
+const loader = new ConfigLoader();
 
 export function getBrand(name: string): Brand | undefined {
     return loader.loadBrandConfig(name);

@@ -7,13 +7,7 @@
     "dev": "tsc --watch",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "test:watch": "node --experimental-vm-modules node_modules/jest/bin/jest.js --watch",
-    "generate:brands": "npm run build && node dist/scripts/generate-brand-themes.js",
-    "generate:brands:prod": "cross-env NODE_ENV=production npm run generate:brands",
-    "generate:brands:staging": "cross-env NODE_ENV=staging npm run generate:brands",
-    "commit": "cz",
-    "version": "conventional-changelog -p angular -i CHANGELOG.md -s && git add CHANGELOG.md",
-    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s",
-    "changelog:first": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0"
+    "generate": "npm run build && node dist/scripts/generate-brand-themes.js"
   },
   "devDependencies": {
     "@types/jest": "^29.5.12",

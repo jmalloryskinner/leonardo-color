@@ -4,6 +4,7 @@ import { Theme, Color, BackgroundColor } from '@adobe/leonardo-contrast-colors';
 import { ThemeConfig, ContrastColors, ContrastColor, ContrastColorValue } from '../types/theme.js';
 import { ThemeOutput, ColorStep, ColorScale, ColorThemeVariant } from '../types/output.js';
 import { themeSchema } from '../schemas/theme.schema.js';
+import { DESIGN_TOKENS_DIRECTORY } from '../constants/index.js';
 
 export class ThemeGenerator {
     private readonly outputDir: string;
@@ -99,7 +100,7 @@ export class ThemeGenerator {
 
     public saveThemeToFile(themeName: string, themeData: ThemeOutput): void {
         try {
-            const themesPath = path.join(process.cwd(), this.outputDir, 'themes');
+            const themesPath = path.join(process.cwd(), this.outputDir, DESIGN_TOKENS_DIRECTORY);
             if (!fs.existsSync(themesPath)) {
                 fs.mkdirSync(themesPath, { recursive: true });
             }
