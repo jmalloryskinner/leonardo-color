@@ -1,3 +1,4 @@
+/** @type {import('jest').Config} */
 export default {
   preset: 'ts-jest',
   testEnvironment: 'node',
@@ -13,4 +14,5 @@ export default {
       },
     ],
   },
+  testPathIgnorePatterns: ['/node_modules/', '/dist/']
 };
