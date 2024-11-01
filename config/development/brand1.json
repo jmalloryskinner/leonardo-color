@@ -1,19 +1,14 @@
 {
     "colors": [
         {
-            "name": "blue",
+            "name": "accent",
             "colorKeys": ["#5CDBFF", "#0000FF"],
-            "ratios": [3, 4.5, 7]
-        },
-        {
-            "name": "red",
-            "colorKeys": ["#FF9A81", "#FF0000"],
-            "ratios": [3, 4.5, 11]
+            "ratios": [3, 4.5, 7, 12]
         }
     ],
     "backgroundColor": {
-        "name": "gray",
-        "colorKeys": ["#cacaca"],
-        "ratios": [2, 3, 4.5, 8]
+        "name": "neutral",
+        "colorKeys": ["#cacaca", "#f0f0f0"],
+        "ratios": [2, 3, 4.5, 8, 12]
     }
 }

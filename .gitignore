@@ -4,6 +4,11 @@ node_modules/
 # Build output
 dist/
 
+# Logs
+*.log
+error.log
+combined.log
+
 # Environment
 .env
 .env.*
@@ -11,10 +16,6 @@ dist/
 # IDE
 .vscode/
 .idea/
-
-# Logs
-*.log
-npm-debug.log*
 
 # OS
 .DS_Store

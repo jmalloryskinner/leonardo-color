@@ -4,6 +4,33 @@ import { DESIGN_TOKENS_DIRECTORY } from '../constants/index.js';
 import fs from 'fs';
 import path from 'path';
 
+interface ThemeColorStep {
+    light: {
+        $value: string;
+        $type: 'color';
+        $description: string;
+    };
+    dark: {
+        $value: string;
+        $type: 'color';
+        $description: string;
+    };
+}
+
+interface ThemeColorScale {
+    [colorName: string]: {
+        [step: string]: ThemeColorStep;
+    };
+}
+
+interface ThemeStructure {
+    alto: {
+        prim: {
+            colorScale: ThemeColorScale;
+        };
+    };
+}
+
 describe('Theme File Generation', () => {
     const testThemePath = path.join(process.cwd(), 'dist', DESIGN_TOKENS_DIRECTORY, 'test-theme.json');
     
@@ -42,12 +69,22 @@ describe('Theme File Generation', () => {
         generateThemeFile('test-theme', config);
 
         expect(fs.existsSync(testThemePath)).toBe(true);
-        const fileContent = JSON.parse(fs.readFileSync(testThemePath, 'utf-8'));
+        const fileContent = JSON.parse(fs.readFileSync(testThemePath, 'utf-8')) as ThemeStructure;
         
         expect(fileContent).toBeDefined();
+        // Check for alto.prim.colorScale structure
         expect(fileContent.alto).toBeDefined();
         expect(fileContent.alto.prim).toBeDefined();
         expect(fileContent.alto.prim.colorScale).toBeDefined();
+
+        // Check color structure
+        const colorScale = fileContent.alto.prim.colorScale;
+        expect(colorScale['test-color']).toBeDefined();
+        expect(colorScale['test-color']['100']).toBeDefined();
+        expect(colorScale['test-color']['100'].light).toHaveProperty('$value');
+        expect(colorScale['test-color']['100'].light).toHaveProperty('$type', 'color');
+        expect(colorScale['test-color']['100'].light).toHaveProperty('$description');
+        expect(colorScale['test-color']['100'].dark).toBeDefined();
     });
 
     it('should throw error for invalid color values', () => {

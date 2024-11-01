@@ -1,6 +1,11 @@
-import { Theme, Color, BackgroundColor, CssColor } from '@adobe/leonardo-contrast-colors';
+import { Theme, CssColor } from '@adobe/leonardo-contrast-colors';
 
-// Base color configuration
+/**
+ * Configuration for a single color in the theme
+ * @property name - Unique identifier for the color
+ * @property colorKeys - Array of hex color values defining the color scale
+ * @property ratios - Array of contrast ratios to generate
+ */
 export interface ColorConfig {
     name: string;
     colorKeys: CssColor[];
@@ -13,7 +18,14 @@ export interface BrandConfig {
     backgroundColor: ColorConfig;
 }
 
-// Theme configuration extends brand config with theme options
+/**
+ * Configuration for generating a color theme
+ * @property colors - Array of color configurations
+ * @property backgroundColor - Background color configuration
+ * @property lightness - Theme lightness value (0-100)
+ * @property contrast - Optional contrast multiplier
+ * @property saturation - Optional saturation value (0-100)
+ */
 export interface ThemeConfig extends BrandConfig {
     lightness: number;
     contrast?: number;
@@ -38,6 +50,11 @@ export interface ContrastColor {
 
 export type ContrastColors = [ContrastColorBackground, ...ContrastColor[]];
 
+/**
+ * Output format for generated themes
+ * @property theme - Leonardo Theme instance
+ * @property colors - Generated color values
+ */
 export interface ThemeOutput {
     theme: Theme;
     colors: ContrastColors;
