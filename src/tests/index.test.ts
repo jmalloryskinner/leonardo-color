@@ -1,32 +1,8 @@
 import { generateThemeFile } from '../index.js';
-import { ThemeConfig } from '../types/theme.js';
-import { CssColor } from '@adobe/leonardo-contrast-colors';
+import { ThemeConfig, ThemeSchema } from '../types/theme.js';
+import type { CssColor } from '@adobe/leonardo-contrast-colors';
 import fs from 'fs';
 import path from 'path';
-
-// Define expected output structure
-interface ThemeOutput {
-    alto: {
-        prim: {
-            colors: {
-                [key: string]: {
-                    [key: string]: {
-                        light: {
-                            $type: string;
-                            $value: string;
-                            $description: string;
-                        };
-                        dark: {
-                            $type: string;
-                            $value: string;
-                            $description: string;
-                        };
-                    };
-                };
-            };
-        };
-    };
-}
 
 describe('Theme File Generation', () => {
     const testConfig: ThemeConfig = {
@@ -51,18 +27,18 @@ describe('Theme File Generation', () => {
         const outputPath = path.join(process.cwd(), 'dist/design-tokens', 'test-theme.json');
         expect(fs.existsSync(outputPath)).toBe(true);
 
-        const fileContent = JSON.parse(fs.readFileSync(outputPath, 'utf8')) as ThemeOutput;
+        const fileContent = JSON.parse(fs.readFileSync(outputPath, 'utf8')) as ThemeSchema;
         expect(fileContent.alto).toBeDefined();
         expect(fileContent.alto.prim).toBeDefined();
-        expect(fileContent.alto.prim.colors).toBeDefined();
+        expect(fileContent.alto.prim.colorScale).toBeDefined();
         
         // Additional type-safe assertions
         expect(typeof fileContent.alto).toBe('object');
         expect(typeof fileContent.alto.prim).toBe('object');
-        expect(typeof fileContent.alto.prim.colors).toBe('object');
+        expect(typeof fileContent.alto.prim.colorScale).toBe('object');
 
         // Check for color presence
-        const testColor = fileContent.alto.prim.colors['test-color'];
+        const testColor = fileContent.alto.prim.colorScale['test-color'];
         expect(testColor).toBeDefined();
         
         // Check for color variants

@@ -1,20 +1,15 @@
-import { Theme, Color, BackgroundColor, CssColor, InterpolationColorspace } from '@adobe/leonardo-contrast-colors';
+import { Theme, Color, BackgroundColor, InterpolationColorspace } from '@adobe/leonardo-contrast-colors';
 import { SettingsManager } from '../core/SettingsManager.js';
 import { 
     ThemeConfig, 
-    ContrastColors, 
     ThemeOutput, 
     ContrastColor,
     ContrastColorValue,
     ColorConfig 
 } from '../types/theme.js';
-import { ColorGenerationError } from '../types/errors.js';
-import { ValidationResult } from '../types/validation.js';
-import { validateColor } from '../utils/colorUtils.js';
 import { logger } from '../utils/logger.js';
 import { benchmark } from '../utils/benchmark.js';
-import { ThemeVariantType, ThemeVariantConfig } from '../core/settings/ThemeSettings.js';
-import { SchemaConfig } from '../core/settings/SchemaSettings.js';
+import { ThemeVariantType } from '../core/settings/ThemeSettings.js';
 import path from 'path';
 import fs from 'fs';
 import { DESIGN_TOKENS_DIRECTORY } from '../constants/index.js';
@@ -117,16 +112,12 @@ export class ThemeGenerator {
 
     private formatThemeOutput(themeData: ThemeOutput): unknown {
         // Get schema configuration
-        const schema = this.#settings.getSchema();
-        const { root, properties } = schema;
+        const { root } = this.#settings.getSchema();
 
         // Generate color scales
         const colorScales = themeData.colors.reduce((acc: Record<string, unknown>, color, index) => {
             // Handle background color (first item in the array)
             if (index === 0 && 'background' in color) {
-                // Get the background color config
-                const bgConfig = this.#settings.getThemes().variants;
-                
                 // Create background color scale using the name from config
                 const neutralScale = {} as Record<string, unknown>;
                 
@@ -233,10 +224,8 @@ export class ThemeGenerator {
         // Build output structure dynamically based on schema root
         return root.reduceRight((acc, key, index) => {
             if (index === root.length - 1) {
-                // Last key in root array gets the color scales
                 return { [key]: colorScales };
             }
-            // Wrap previous accumulator in new object
             return { [key]: acc };
         }, {} as Record<string, unknown>);
     }

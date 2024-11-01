@@ -1,6 +1,6 @@
 import { ThemeGenerator } from '../services/themeGenerator.js';
-import { ThemeConfig } from '../types/theme.js';
-import type { CssColor, ContrastColor, ContrastColorBackground, ContrastColorValue } from '@adobe/leonardo-contrast-colors';
+import { ThemeConfig, ContrastColor, ContrastColorValue, ThemeSchema } from '../types/theme.js';
+import type { CssColor } from '@adobe/leonardo-contrast-colors';
 import fs from 'fs';
 import path from 'path';
 
@@ -90,9 +90,12 @@ describe('ThemeGenerator', () => {
             const outputPath = path.join(process.cwd(), testOutputDir, 'design-tokens', 'test-theme.json');
             expect(fs.existsSync(outputPath)).toBe(true);
 
-            const fileContent = JSON.parse(fs.readFileSync(outputPath, 'utf8'));
-            expect(fileContent).toHaveProperty('alto.prim.colors');
-            expect(fileContent.alto.prim.colors).toHaveProperty('accent');
+            const fileContent = JSON.parse(fs.readFileSync(outputPath, 'utf8')) as ThemeSchema;
+            
+            expect(fileContent.alto).toBeDefined();
+            expect(fileContent.alto.prim).toBeDefined();
+            expect(fileContent.alto.prim.colorScale).toBeDefined();
+            expect(fileContent.alto.prim.colorScale.accent).toBeDefined();
         });
 
         it('should generate both light and dark variants', () => {
@@ -100,10 +103,10 @@ describe('ThemeGenerator', () => {
             generator.saveThemeToFile('test-theme', theme);
 
             const outputPath = path.join(process.cwd(), testOutputDir, 'design-tokens', 'test-theme.json');
-            const fileContent = JSON.parse(fs.readFileSync(outputPath, 'utf8'));
+            const fileContent = JSON.parse(fs.readFileSync(outputPath, 'utf8')) as ThemeSchema;
 
             // Check first color step for light/dark variants
-            const firstColorStep = fileContent.alto.prim.colors.accent['100'];
+            const firstColorStep = fileContent.alto.prim.colorScale.accent['100'];
             expect(firstColorStep).toHaveProperty('light');
             expect(firstColorStep).toHaveProperty('dark');
             expect(firstColorStep.light.$value).not.toBe(firstColorStep.dark.$value);
@@ -128,10 +131,10 @@ describe('ThemeGenerator', () => {
             generator.saveThemeToFile('test-theme', theme);
 
             const outputPath = path.join(process.cwd(), testOutputDir, 'design-tokens', 'test-theme.json');
-            const fileContent = JSON.parse(fs.readFileSync(outputPath, 'utf8'));
+            const fileContent = JSON.parse(fs.readFileSync(outputPath, 'utf8')) as ThemeSchema;
 
-            expect(fileContent.alto.prim.colors).toHaveProperty('accent');
-            expect(fileContent.alto.prim.colors).toHaveProperty('red');
+            expect(fileContent.alto.prim.colorScale).toHaveProperty('accent');
+            expect(fileContent.alto.prim.colorScale).toHaveProperty('red');
         });
     });
 }); 
