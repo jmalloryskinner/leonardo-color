@@ -1,6 +1,6 @@
 /** @type {import('jest').Config} */
 export default {
-  preset: 'ts-jest',
+  preset: 'ts-jest/presets/default-esm',
   testEnvironment: 'node',
   extensionsToTreatAsEsm: ['.ts'],
   moduleNameMapper: {
@@ -14,5 +14,8 @@ export default {
       },
     ],
   },
+  transformIgnorePatterns: [
+    'node_modules/(?!(@adobe/leonardo-contrast-colors)/)'
+  ],
   testPathIgnorePatterns: ['/node_modules/', '/dist/']
 };

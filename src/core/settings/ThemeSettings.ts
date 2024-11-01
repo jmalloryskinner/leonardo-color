@@ -1,6 +1,6 @@
 /**
  * Configuration for a theme variant
- * Defines how colors are transformed for different themes (light/dark/dim)
+ * Defines how colors are transformed for different themes (light/dark)
  */
 export interface ThemeVariantConfig {
     /** Base lightness value for the theme (0-100) */
@@ -15,7 +15,7 @@ export interface ThemeVariantConfig {
  * Available theme variants
  * Used to generate type-safe theme variant keys
  */
-export const THEME_VARIANTS = ['light', 'dark', 'dim'] as const;
+export const THEME_VARIANTS = ['light', 'dark'] as const;
 
 /**
  * Type-safe theme variant names
@@ -36,7 +36,7 @@ export interface ThemeConfig {
 
 /**
  * Default theme configurations
- * Provides base settings for light, dark, and dim themes
+ * Provides base settings for light and dark themes
  */
 export const defaultThemes: ThemeConfig = {
     variants: {
@@ -49,11 +49,6 @@ export const defaultThemes: ThemeConfig = {
             lightness: 0,    // Minimum lightness for dark theme
             contrast: 1.2,   // Increased contrast for better readability
             saturation: 90   // Slightly reduced saturation
-        },
-        dim: {
-            lightness: 20,   // Low lightness for dim theme
-            contrast: 1.1,   // Slightly increased contrast
-            saturation: 95   // Nearly full saturation
         }
     },
     defaultVariant: 'light'

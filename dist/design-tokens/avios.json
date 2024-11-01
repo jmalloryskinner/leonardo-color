@@ -1,69 +1,7 @@
 {
   "alto": {
     "prim": {
-      "colors": {
-        "accent": {
-          "100": {
-            "light": {
-              "$type": "color",
-              "$value": "#3f95ff",
-              "$description": "3:1 against background"
-            },
-            "dark": {
-              "$type": "color",
-              "$value": "#3162a1",
-              "$description": "3.4:1 against background"
-            }
-          },
-          "200": {
-            "light": {
-              "$type": "color",
-              "$value": "#2d6bff",
-              "$description": "4.5:1 against background"
-            },
-            "dark": {
-              "$type": "color",
-              "$value": "#407fd0",
-              "$description": "5.2:1 against background"
-            }
-          },
-          "300": {
-            "light": {
-              "$type": "color",
-              "$value": "#1635ff",
-              "$description": "7:1 against background"
-            },
-            "dark": {
-              "$type": "color",
-              "$value": "#64a4f6",
-              "$description": "8.2:1 against background"
-            }
-          },
-          "400": {
-            "light": {
-              "$type": "color",
-              "$value": "#0000be",
-              "$description": "12:1 against background"
-            },
-            "dark": {
-              "$type": "color",
-              "$value": "#bad7fb",
-              "$description": "14.2:1 against background"
-            }
-          },
-          "500": {
-            "light": {
-              "$type": "color",
-              "$value": "#00004c",
-              "$description": "19:1 against background"
-            },
-            "dark": {
-              "$type": "color",
-              "$value": "#ffffff",
-              "$description": "22.6:1 against background"
-            }
-          }
-        },
+      "colorScale": {
         "neutral": {
           "100": {
             "light": {
@@ -85,7 +23,7 @@
             },
             "dark": {
               "$type": "color",
-              "$value": "#080808",
+              "$value": "#080809",
               "$description": "1.05:1 against background"
             }
           },
@@ -97,19 +35,19 @@
             },
             "dark": {
               "$type": "color",
-              "$value": "#0c0c0c",
+              "$value": "#0c0c0d",
               "$description": "1.07:1 against background"
             }
           },
           "400": {
             "light": {
               "$type": "color",
-              "$value": "#f5e8e8",
+              "$value": "#f6e8e8",
               "$description": "1.18:1 against background"
             },
             "dark": {
               "$type": "color",
-              "$value": "#1c1c1c",
+              "$value": "#1b1b1e",
               "$description": "1.22:1 against background"
             }
           },
@@ -121,19 +59,19 @@
             },
             "dark": {
               "$type": "color",
-              "$value": "#2a2a2a",
+              "$value": "#2a292f",
               "$description": "1.46:1 against background"
             }
           },
           "600": {
             "light": {
               "$type": "color",
-              "$value": "#b6b5c0",
+              "$value": "#b5b5c0",
               "$description": "2.02:1 against background"
             },
             "dark": {
               "$type": "color",
-              "$value": "#464646",
+              "$value": "#464450",
               "$description": "2.22:1 against background"
             }
           },
@@ -145,43 +83,43 @@
             },
             "dark": {
               "$type": "color",
-              "$value": "#616161",
+              "$value": "#62606c",
               "$description": "3.41:1 against background"
             }
           },
           "800": {
             "light": {
               "$type": "color",
-              "$value": "#716f7d",
+              "$value": "#716f7e",
               "$description": "4.87:1 against background"
             },
             "dark": {
               "$type": "color",
-              "$value": "#848484",
+              "$value": "#858390",
               "$description": "5.64:1 against background"
             }
           },
           "900": {
             "light": {
               "$type": "color",
-              "$value": "#4a4855",
+              "$value": "#4b4855",
               "$description": "8.89:1 against background"
             },
             "dark": {
               "$type": "color",
-              "$value": "#b7b7b7",
+              "$value": "#b7b6c1",
               "$description": "10.47:1 against background"
             }
           },
           "1000": {
             "light": {
               "$type": "color",
-              "$value": "#27262d",
+              "$value": "#27262c",
               "$description": "14.98:1 against background"
             },
             "dark": {
               "$type": "color",
-              "$value": "#ececec",
+              "$value": "#f6e9e9",
               "$description": "17.78:1 against background"
             }
           },
@@ -207,6 +145,378 @@
               "$type": "color",
               "$value": "#ffffff",
               "$description": "25:1 against background"
+            }
+          }
+        },
+        "accent": {
+          "100": {
+            "light": {
+              "$type": "color",
+              "$value": "#5293ff",
+              "$description": "3:1 against background"
+            },
+            "dark": {
+              "$type": "color",
+              "$value": "#2c45ff",
+              "$description": "3.4:1 against background"
+            }
+          },
+          "200": {
+            "light": {
+              "$type": "color",
+              "$value": "#4767ff",
+              "$description": "4.5:1 against background"
+            },
+            "dark": {
+              "$type": "color",
+              "$value": "#4b73ff",
+              "$description": "5.2:1 against background"
+            }
+          },
+          "300": {
+            "light": {
+              "$type": "color",
+              "$value": "#2a32ff",
+              "$description": "7:1 against background"
+            },
+            "dark": {
+              "$type": "color",
+              "$value": "#5aa4ff",
+              "$description": "8.2:1 against background"
+            }
+          },
+          "400": {
+            "light": {
+              "$type": "color",
+              "$value": "#0800bd",
+              "$description": "12:1 against background"
+            },
+            "dark": {
+              "$type": "color",
+              "$value": "#7ae3fb",
+              "$description": "14.2:1 against background"
+            }
+          },
+          "500": {
+            "light": {
+              "$type": "color",
+              "$value": "#17072d",
+              "$description": "19:1 against background"
+            },
+            "dark": {
+              "$type": "color",
+              "$value": "#ffffff",
+              "$description": "22.6:1 against background"
+            }
+          }
+        },
+        "red": {
+          "100": {
+            "light": {
+              "$type": "color",
+              "$value": "#ff603d",
+              "$description": "3:1 against background"
+            },
+            "dark": {
+              "$type": "color",
+              "$value": "#c31111",
+              "$description": "3.4:1 against background"
+            }
+          },
+          "200": {
+            "light": {
+              "$type": "color",
+              "$value": "#ef0000",
+              "$description": "4.5:1 against background"
+            },
+            "dark": {
+              "$type": "color",
+              "$value": "#f32d21",
+              "$description": "5.2:1 against background"
+            }
+          },
+          "300": {
+            "light": {
+              "$type": "color",
+              "$value": "#b60000",
+              "$description": "7:1 against background"
+            },
+            "dark": {
+              "$type": "color",
+              "$value": "#ff7a5e",
+              "$description": "8.2:1 against background"
+            }
+          },
+          "400": {
+            "light": {
+              "$type": "color",
+              "$value": "#730500",
+              "$description": "12:1 against background"
+            },
+            "dark": {
+              "$type": "color",
+              "$value": "#ffc8b7",
+              "$description": "14.2:1 against background"
+            }
+          },
+          "500": {
+            "light": {
+              "$type": "color",
+              "$value": "#200a01",
+              "$description": "19:1 against background"
+            },
+            "dark": {
+              "$type": "color",
+              "$value": "#ffffff",
+              "$description": "22.6:1 against background"
+            }
+          }
+        },
+        "green": {
+          "100": {
+            "light": {
+              "$type": "color",
+              "$value": "#00ad00",
+              "$description": "3:1 against background"
+            },
+            "dark": {
+              "$type": "color",
+              "$value": "#1e7019",
+              "$description": "3.4:1 against background"
+            }
+          },
+          "200": {
+            "light": {
+              "$type": "color",
+              "$value": "#008a00",
+              "$description": "4.5:1 against background"
+            },
+            "dark": {
+              "$type": "color",
+              "$value": "#1d921c",
+              "$description": "5.2:1 against background"
+            }
+          },
+          "300": {
+            "light": {
+              "$type": "color",
+              "$value": "#0e6708",
+              "$description": "7:1 against background"
+            },
+            "dark": {
+              "$type": "color",
+              "$value": "#1fbb21",
+              "$description": "8.2:1 against background"
+            }
+          },
+          "400": {
+            "light": {
+              "$type": "color",
+              "$value": "#153f0e",
+              "$description": "12:1 against background"
+            },
+            "dark": {
+              "$type": "color",
+              "$value": "#3df438",
+              "$description": "14.2:1 against background"
+            }
+          },
+          "500": {
+            "light": {
+              "$type": "color",
+              "$value": "#0a1205",
+              "$description": "19:1 against background"
+            },
+            "dark": {
+              "$type": "color",
+              "$value": "#ffffff",
+              "$description": "22.6:1 against background"
+            }
+          }
+        },
+        "blue": {
+          "100": {
+            "light": {
+              "$type": "color",
+              "$value": "#aa7bff",
+              "$description": "3:1 against background"
+            },
+            "dark": {
+              "$type": "color",
+              "$value": "#493efe",
+              "$description": "3.4:1 against background"
+            }
+          },
+          "200": {
+            "light": {
+              "$type": "color",
+              "$value": "#8353ff",
+              "$description": "4.5:1 against background"
+            },
+            "dark": {
+              "$type": "color",
+              "$value": "#8164ff",
+              "$description": "5.2:1 against background"
+            }
+          },
+          "300": {
+            "light": {
+              "$type": "color",
+              "$value": "#4925ff",
+              "$description": "7:1 against background"
+            },
+            "dark": {
+              "$type": "color",
+              "$value": "#af8fff",
+              "$description": "8.2:1 against background"
+            }
+          },
+          "400": {
+            "light": {
+              "$type": "color",
+              "$value": "#0000be",
+              "$description": "12:1 against background"
+            },
+            "dark": {
+              "$type": "color",
+              "$value": "#deccff",
+              "$description": "14.2:1 against background"
+            }
+          },
+          "500": {
+            "light": {
+              "$type": "color",
+              "$value": "#150730",
+              "$description": "19:1 against background"
+            },
+            "dark": {
+              "$type": "color",
+              "$value": "#ffffff",
+              "$description": "22.6:1 against background"
+            }
+          }
+        },
+        "purple": {
+          "100": {
+            "light": {
+              "$type": "color",
+              "$value": "#bf80b7",
+              "$description": "3:1 against background"
+            },
+            "dark": {
+              "$type": "color",
+              "$value": "#94418e",
+              "$description": "3.4:1 against background"
+            }
+          },
+          "200": {
+            "light": {
+              "$type": "color",
+              "$value": "#aa59a2",
+              "$description": "4.5:1 against background"
+            },
+            "dark": {
+              "$type": "color",
+              "$value": "#ab67a3",
+              "$description": "5.2:1 against background"
+            }
+          },
+          "300": {
+            "light": {
+              "$type": "color",
+              "$value": "#922e8d",
+              "$description": "7:1 against background"
+            },
+            "dark": {
+              "$type": "color",
+              "$value": "#c492bd",
+              "$description": "8.2:1 against background"
+            }
+          },
+          "400": {
+            "light": {
+              "$type": "color",
+              "$value": "#550088",
+              "$description": "12:1 against background"
+            },
+            "dark": {
+              "$type": "color",
+              "$value": "#e5cde1",
+              "$description": "14.2:1 against background"
+            }
+          },
+          "500": {
+            "light": {
+              "$type": "color",
+              "$value": "#190923",
+              "$description": "19:1 against background"
+            },
+            "dark": {
+              "$type": "color",
+              "$value": "#ffffff",
+              "$description": "22.6:1 against background"
+            }
+          }
+        },
+        "warning": {
+          "100": {
+            "light": {
+              "$type": "color",
+              "$value": "#d18400",
+              "$description": "3:1 against background"
+            },
+            "dark": {
+              "$type": "color",
+              "$value": "#855815",
+              "$description": "3.4:1 against background"
+            }
+          },
+          "200": {
+            "light": {
+              "$type": "color",
+              "$value": "#a76900",
+              "$description": "4.5:1 against background"
+            },
+            "dark": {
+              "$type": "color",
+              "$value": "#ad7219",
+              "$description": "5.2:1 against background"
+            }
+          },
+          "300": {
+            "light": {
+              "$type": "color",
+              "$value": "#7d4f00",
+              "$description": "7:1 against background"
+            },
+            "dark": {
+              "$type": "color",
+              "$value": "#dd9224",
+              "$description": "8.2:1 against background"
+            }
+          },
+          "400": {
+            "light": {
+              "$type": "color",
+              "$value": "#4c3109",
+              "$description": "12:1 against background"
+            },
+            "dark": {
+              "$type": "color",
+              "$value": "#ffcc72",
+              "$description": "14.2:1 against background"
+            }
+          },
+          "500": {
+            "light": {
+              "$type": "color",
+              "$value": "#160f04",
+              "$description": "19:1 against background"
+            },
+            "dark": {
+              "$type": "color",
+              "$value": "#ffffff",
+              "$description": "22.6:1 against background"
             }
           }
         }

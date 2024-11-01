@@ -63,11 +63,13 @@ export type ContrastColors = [ContrastColorBackground, ...ContrastColor[]];
  * Output format for generated themes
  * @property theme - Leonardo Theme instance
  * @property colors - Generated color values
+ * @property variants - Theme variants (light/dark)
  * @property metadata - Optional additional metadata for the theme
  */
 export interface ThemeOutput {
     theme: Theme;
     colors: ContrastColors;
+    variants: Record<ThemeVariantType, ContrastColors>;
     metadata?: Record<string, unknown>;
 }
 

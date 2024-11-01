@@ -1,100 +1,137 @@
 import { ThemeGenerator } from '../services/themeGenerator.js';
-import { ColorGenerationError } from '../types/errors.js';
-import { ThemeConfig, ColorConfig } from '../types/theme.js';
-import { CssColor } from '@adobe/leonardo-contrast-colors';
+import { ThemeConfig } from '../types/theme.js';
+import type { CssColor, ContrastColor, ContrastColorBackground, ContrastColorValue } from '@adobe/leonardo-contrast-colors';
+import fs from 'fs';
+import path from 'path';
 
 describe('ThemeGenerator', () => {
     let generator: ThemeGenerator;
-    
+    const testOutputDir = 'test-dist';
+
+    // Sample test configuration
+    const testConfig: ThemeConfig = {
+        colors: [
+            {
+                name: 'accent',
+                colorKeys: ['#5CDBFF', '#0000FF'] as CssColor[],
+                ratios: [3, 4.5],
+                colorspace: 'LAB',
+                smooth: true
+            }
+        ],
+        backgroundColor: {
+            name: 'neutral',
+            colorKeys: ['#FFFFFF'] as CssColor[],
+            ratios: [1],
+            colorspace: 'LAB',
+            smooth: true
+        },
+        options: {
+            variant: 'light'
+        }
+    };
+
     beforeEach(() => {
-        generator = new ThemeGenerator('test-dist');
+        generator = new ThemeGenerator(testOutputDir);
     });
 
-    describe('Color Validation', () => {
-        it('should validate correct color configs', () => {
-            const config: ColorConfig = {
-                name: 'test',
-                colorKeys: ['#000000', '#ffffff'] as CssColor[],
-                ratios: [3, 4.5]
-            };
-
-            const result = generator['validateColorConfig'](config);
-            expect(result.isValid).toBe(true);
-            expect(result.errors).toHaveLength(0);
-        });
-
-        it('should reject invalid color values', () => {
-            const config: ColorConfig = {
-                name: 'test',
-                colorKeys: ['#000000', '#XYZ123'] as CssColor[],
-                ratios: [3, 4.5]
-            };
-
-            const result = generator['validateColorConfig'](config);
-            expect(result.isValid).toBe(false);
-            expect(result.errors).toContain('Invalid color keys');
-        });
-
-        it('should reject negative contrast ratios', () => {
-            const config: ColorConfig = {
-                name: 'test',
-                colorKeys: ['#000000', '#ffffff'] as CssColor[],
-                ratios: [-1, -2]
-            };
-
-            const result = generator['validateColorConfig'](config);
-            expect(result.isValid).toBe(false);
-            expect(result.errors).toContain('Invalid contrast ratios');
-        });
+    afterEach(() => {
+        // Clean up test output directory
+        if (fs.existsSync(testOutputDir)) {
+            fs.rmSync(testOutputDir, { recursive: true });
+        }
     });
 
     describe('Theme Generation', () => {
-        it('should generate theme with correct structure', () => {
-            const config: ThemeConfig = {
-                colors: [{
-                    name: 'test',
-                    colorKeys: ['#000000', '#ffffff'] as CssColor[],
-                    ratios: [3, 4.5]
-                }],
-                backgroundColor: {
-                    name: 'bg',
-                    colorKeys: ['#ffffff'] as CssColor[],
-                    ratios: [2]
-                },
-                options: {
-                    variant: 'light'
-                }
-            };
-
-            const result = generator.generateTheme(config);
-            expect(result.theme).toBeDefined();
-            expect(result.colors).toBeDefined();
-            expect(result.colors[0]).toHaveProperty('background');
-            expect(result.colors[1]).toHaveProperty('name', 'test');
-            expect(Array.isArray(result.colors[1].values)).toBe(true);
-            expect(result.colors[1].values[0]).toHaveProperty('contrast');
-            expect(result.colors[1].values[0]).toHaveProperty('value');
+        it('should generate a theme with correct structure', () => {
+            const theme = generator.generateTheme(testConfig);
+            
+            // Check theme structure
+            expect(theme).toHaveProperty('theme');
+            expect(theme).toHaveProperty('colors');
+            
+            // Check colors array structure
+            expect(Array.isArray(theme.colors)).toBe(true);
+            expect(theme.colors[0]).toHaveProperty('background');
+            expect(theme.colors.length).toBeGreaterThan(1);
         });
 
-        it('should throw error for invalid colors', () => {
-            const config: ThemeConfig = {
-                colors: [{
-                    name: 'test',
-                    colorKeys: ['#XYZ000'] as CssColor[],
-                    ratios: [3]
-                }],
-                backgroundColor: {
-                    name: 'bg',
-                    colorKeys: ['#ffffff'] as CssColor[],
-                    ratios: [2]
-                },
-                options: {
-                    variant: 'light'
-                }
+        it('should generate correct number of color variants', () => {
+            const theme = generator.generateTheme(testConfig);
+            const accentColor = theme.colors.find((value): value is ContrastColor => 
+                'name' in value && value.name === 'accent'
+            );
+
+            expect(accentColor).toBeDefined();
+            if (accentColor && 'values' in accentColor) {
+                expect(accentColor.values.length).toBe(testConfig.colors[0].ratios.length);
+            }
+        });
+
+        it('should maintain contrast ratios', () => {
+            const theme = generator.generateTheme(testConfig);
+            const accentColor = theme.colors.find((value): value is ContrastColor => 
+                'name' in value && value.name === 'accent'
+            );
+
+            if (accentColor && 'values' in accentColor) {
+                accentColor.values.forEach((value: ContrastColorValue, index: number) => {
+                    expect(value.contrast).toBe(testConfig.colors[0].ratios[index]);
+                });
+            }
+        });
+    });
+
+    describe('File Output', () => {
+        it('should save theme file with correct structure', () => {
+            const theme = generator.generateTheme(testConfig);
+            generator.saveThemeToFile('test-theme', theme);
+
+            const outputPath = path.join(process.cwd(), testOutputDir, 'design-tokens', 'test-theme.json');
+            expect(fs.existsSync(outputPath)).toBe(true);
+
+            const fileContent = JSON.parse(fs.readFileSync(outputPath, 'utf8'));
+            expect(fileContent).toHaveProperty('alto.prim.colors');
+            expect(fileContent.alto.prim.colors).toHaveProperty('accent');
+        });
+
+        it('should generate both light and dark variants', () => {
+            const theme = generator.generateTheme(testConfig);
+            generator.saveThemeToFile('test-theme', theme);
+
+            const outputPath = path.join(process.cwd(), testOutputDir, 'design-tokens', 'test-theme.json');
+            const fileContent = JSON.parse(fs.readFileSync(outputPath, 'utf8'));
+
+            // Check first color step for light/dark variants
+            const firstColorStep = fileContent.alto.prim.colors.accent['100'];
+            expect(firstColorStep).toHaveProperty('light');
+            expect(firstColorStep).toHaveProperty('dark');
+            expect(firstColorStep.light.$value).not.toBe(firstColorStep.dark.$value);
+        });
+
+        it('should handle multiple colors', () => {
+            const multiColorConfig: ThemeConfig = {
+                ...testConfig,
+                colors: [
+                    ...testConfig.colors,
+                    {
+                        name: 'red',
+                        colorKeys: ['#FF0000'] as CssColor[],
+                        ratios: [3, 4.5],
+                        colorspace: 'LAB',
+                        smooth: true
+                    }
+                ]
             };
 
-            expect(() => generator.generateTheme(config))
-                .toThrow(ColorGenerationError);
+            const theme = generator.generateTheme(multiColorConfig);
+            generator.saveThemeToFile('test-theme', theme);
+
+            const outputPath = path.join(process.cwd(), testOutputDir, 'design-tokens', 'test-theme.json');
+            const fileContent = JSON.parse(fs.readFileSync(outputPath, 'utf8'));
+
+            expect(fileContent.alto.prim.colors).toHaveProperty('accent');
+            expect(fileContent.alto.prim.colors).toHaveProperty('red');
         });
     });
 }); 

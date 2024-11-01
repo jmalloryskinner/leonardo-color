@@ -4,6 +4,39 @@
             "name": "accent",
             "colorKeys": ["#5CDBFF", "#0000FF"],
             "ratios": [3, 4.5, 7, 12, 19]
+        },
+        {
+            "name": "red",
+            "colorKeys": ["#FF0000"],
+            "ratios": [3, 4.5, 7, 12, 19]
+        },
+        {
+            "name": "green",
+            "colorKeys": ["#00FF00"],
+            "ratios": [3, 4.5, 7, 12, 19],
+            "colorspace": "LAB",
+            "smooth": true
+        },
+        {
+            "name": "blue",
+            "colorKeys": ["#0000FF"],
+            "ratios": [3, 4.5, 7, 12, 19],
+            "colorspace": "LAB",
+            "smooth": true
+        },
+        {
+            "name": "purple",
+            "colorKeys": ["#800080", "#4B0082"],
+            "ratios": [3, 4.5, 7, 12, 19],
+            "colorspace": "LAB",
+            "smooth": true
+        },
+        {
+            "name": "warning",
+            "colorKeys": ["#FFA500"],
+            "ratios": [3, 4.5, 7, 12, 19],
+            "colorspace": "LAB",
+            "smooth": true
         }
     ],
     "backgroundColor": {
