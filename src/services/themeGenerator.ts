@@ -1,123 +1,106 @@
-import fs from 'fs';
 import path from 'path';
+import fs from 'fs';
 import { Theme, Color, BackgroundColor } from '@adobe/leonardo-contrast-colors';
-import { ThemeConfig, ContrastColors, ContrastColor, ContrastColorValue } from '../types/theme.js';
-import { ThemeOutput, ColorStep, ColorScale, ColorThemeVariant } from '../types/output.js';
-import { themeSchema } from '../schemas/theme.schema.js';
+import { ConfigManager } from '../core/ConfigManager.js';
+import { ThemeConfig, ContrastColors, ThemeOutput, ContrastColor } from '../types/theme.js';
 import { DESIGN_TOKENS_DIRECTORY } from '../constants/index.js';
 
 export class ThemeGenerator {
-    private readonly outputDir: string;
+    #configManager: ConfigManager;
+    #outputDir: string;
 
     constructor(outputDir: string = 'dist') {
-        this.outputDir = outputDir;
-    }
-
-    private createNestedObject(keys: string[], value: any): any {
-        const lastKey = keys[keys.length - 1];
-        const result = keys.slice(0, -1).reduceRight(
-            (value, key) => ({ [key]: value }),
-            { [lastKey]: value }
-        );
-        return result;
-    }
-
-    private formatThemeVariant(value: ContrastColorValue, variant: string): ColorThemeVariant {
-        const { prefixes } = themeSchema.structure;
-        return {
-            [`${prefixes.value}value`]: value.value,
-            [`${prefixes.type}type`]: themeSchema.formatters.colorType,
-            [`${prefixes.description}description`]: themeSchema.formatters.description(value.contrast)
-        };
-    }
-
-    private formatThemeOutput(lightColors: ContrastColors, darkColors: ContrastColors): ThemeOutput {
-        const colorScale: ColorScale = {};
-
-        // Process light theme colors
-        const lightColorGroups = lightColors.slice(1) as ContrastColor[];
-        lightColorGroups.forEach(colorGroup => {
-            const colorName = colorGroup.name;
-            colorScale[colorName] = {};
-
-            colorGroup.values.forEach((value: ContrastColorValue) => {
-                const step = value.name.replace(colorName, '');
-                if (!colorScale[colorName][step]) {
-                    colorScale[colorName][step] = {} as ColorStep;
-                }
-
-                colorScale[colorName][step][themeSchema.structure.variants.light] = 
-                    this.formatThemeVariant(value, 'light');
-            });
-        });
-
-        // Process dark theme colors
-        const darkColorGroups = darkColors.slice(1) as ContrastColor[];
-        darkColorGroups.forEach(colorGroup => {
-            const colorName = colorGroup.name;
-            
-            colorGroup.values.forEach((value: ContrastColorValue) => {
-                const step = value.name.replace(colorName, '');
-                if (!colorScale[colorName][step]) {
-                    colorScale[colorName][step] = {} as ColorStep;
-                }
-
-                colorScale[colorName][step][themeSchema.structure.variants.dark] = 
-                    this.formatThemeVariant(value, 'dark');
-            });
-        });
-
-        // Create the nested structure based on schema
-        return this.createNestedObject(
-            [...themeSchema.structure.root, themeSchema.structure.colorScale],
-            colorScale
-        ) as ThemeOutput;
+        this.#configManager = ConfigManager.getInstance();
+        this.#outputDir = outputDir;
     }
 
     public generateTheme(config: ThemeConfig): ThemeOutput {
-        const backgroundColor = new BackgroundColor(config.backgroundColor);
-        const colors = config.colors.map(colorConfig => new Color(colorConfig));
+        const themes = this.#configManager.getThemes();
+        const schema = this.#configManager.getSchema();
+
+        // Create array of all colors including background
+        const allColors = [
+            ...config.colors,
+            config.backgroundColor
+        ].map(colorConfig => new Color(colorConfig));
 
         // Generate light theme
         const lightTheme = new Theme({
-            colors,
-            backgroundColor,
-            lightness: 100
+            colors: allColors,
+            backgroundColor: new BackgroundColor(config.backgroundColor),
+            ...themes.light
         });
 
         // Generate dark theme
         const darkTheme = new Theme({
-            colors,
-            backgroundColor,
-            lightness: 0
+            colors: allColors,
+            backgroundColor: new BackgroundColor(config.backgroundColor),
+            ...themes.dark
         });
 
-        return this.formatThemeOutput(
-            lightTheme.contrastColors,
-            darkTheme.contrastColors
-        );
+        const output = this.formatOutput(lightTheme.contrastColors, darkTheme.contrastColors);
+        return {
+            theme: lightTheme,
+            colors: output
+        };
+    }
+
+    private formatOutput(lightColors: ContrastColors, darkColors: ContrastColors): any {
+        const schema = this.#configManager.getSchema();
+        return {
+            [schema.root[0]]: {
+                [schema.root[1]]: {
+                    [schema.colorScale]: {
+                        ...this.formatColorScales(lightColors, darkColors)
+                    }
+                }
+            }
+        };
+    }
+
+    private formatColorScales(lightColors: ContrastColors, darkColors: ContrastColors): any {
+        const colorScales: any = {};
+        
+        const lightColorGroups = lightColors.slice(1) as ContrastColor[];
+        const darkColorGroups = darkColors.slice(1) as ContrastColor[];
+        
+        for (let i = 0; i < lightColorGroups.length; i++) {
+            const lightColor = lightColorGroups[i];
+            const darkColor = darkColorGroups[i];
+            
+            colorScales[lightColor.name] = {};
+            
+            // Loop through all values/ratios
+            lightColor.values.forEach((value, index) => {
+                const step = (index + 1) * 100; // 100, 200, 300, etc.
+                colorScales[lightColor.name][step] = {
+                    light: {
+                        $value: value.value,
+                        $type: "color",
+                        $description: `${value.contrast}:1 against background`
+                    },
+                    dark: {
+                        $value: darkColor.values[index].value,
+                        $type: "color",
+                        $description: `${darkColor.values[index].contrast}:1 against background`
+                    }
+                };
+            });
+        }
+        
+        return colorScales;
     }
 
     public saveThemeToFile(themeName: string, themeData: ThemeOutput): void {
-        try {
-            const themesPath = path.join(process.cwd(), this.outputDir, DESIGN_TOKENS_DIRECTORY);
-            if (!fs.existsSync(themesPath)) {
-                fs.mkdirSync(themesPath, { recursive: true });
-            }
-
-            const filePath = path.join(themesPath, `${themeName}.json`);
-            fs.writeFileSync(
-                filePath, 
-                JSON.stringify(themeData, null, 2), 
-                { flag: 'w', encoding: 'utf-8' }
-            );
-
-            if (!fs.existsSync(filePath)) {
-                throw new Error(`Failed to write theme file: ${filePath}`);
-            }
-        } catch (error) {
-            const message = error instanceof Error ? error.message : 'Unknown error';
-            throw new Error(`Failed to save theme ${themeName}: ${message}`);
+        const tokensPath = path.join(process.cwd(), this.#outputDir, DESIGN_TOKENS_DIRECTORY);
+        
+        if (!fs.existsSync(tokensPath)) {
+            fs.mkdirSync(tokensPath, { recursive: true });
         }
+
+        fs.writeFileSync(
+            path.join(tokensPath, `${themeName}.json`),
+            JSON.stringify(themeData.colors, null, 2)
+        );
     }
 }
