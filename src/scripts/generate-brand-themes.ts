@@ -1,48 +1,49 @@
 import { generateThemeFile } from '../index.js';
-import { getAllBrands } from '../brands/index.js';
-import { logger } from '../utils/logger.js';
 import { ThemeConfig } from '../types/theme.js';
+import { CssColor } from '@adobe/leonardo-contrast-colors';
+import path from 'path';
+import fs from 'fs';
 
-async function generateBrandThemes(): Promise<void> {
-    logger.info('Starting theme generation');
-    
-    try {
-        const brands = getAllBrands();
-        logger.info(`Found ${brands.length} brands to process`);
-        
-        await Promise.all(brands.map(async (brand) => {
-            try {
-                logger.info(`Generating theme for ${brand.name}`);
-                const config: ThemeConfig = {
-                    ...brand.config,
-                    lightness: 100
-                };
-                await Promise.resolve(generateThemeFile(brand.name, config));
-                logger.info(`✓ Generated theme for ${brand.name}`);
-            } catch (error) {
-                if (error instanceof Error) {
-                    logger.error(`Failed to generate theme for ${brand.name}:`, { error: error.message });
-                } else {
-                    logger.error(`Failed to generate theme for ${brand.name}:`, { error: 'Unknown error' });
-                }
-            }
-        }));
-    } catch (error) {
-        if (error instanceof Error) {
-            logger.error('Failed to generate themes:', { error: error.message });
-        } else {
-            logger.error('Failed to generate themes:', { error: 'Unknown error' });
-        }
-        process.exit(1);
-    }
+const BRANDS_DIR = path.join(process.cwd(), 'src/config/brands');
+
+// Define type for brand config file structure
+interface BrandConfigFile {
+    colors: Array<{
+        name: string;
+        colorKeys: string[];
+        ratios: number[];
+    }>;
+    backgroundColor: {
+        name: string;
+        colorKeys: string[];
+        ratios: number[];
+    };
 }
 
-// Run the generation
-void generateBrandThemes().catch((error: unknown) => {
-    if (error instanceof Error) {
-        logger.error('Unhandled error:', { error: error.message });
-    } else {
-        logger.error('Unhandled error:', { error: 'Unknown error' });
+// Generate themes for each brand config file
+fs.readdirSync(BRANDS_DIR).forEach(file => {
+    if (file.endsWith('.json')) {
+        const brandName = path.basename(file, '.json');
+        const configPath = path.join(BRANDS_DIR, file);
+        const configData = JSON.parse(fs.readFileSync(configPath, 'utf-8')) as BrandConfigFile;
+
+        // Convert the config data to a proper ThemeConfig
+        const config: ThemeConfig = {
+            colors: configData.colors.map(color => ({
+                name: color.name,
+                colorKeys: color.colorKeys as CssColor[],
+                ratios: color.ratios
+            })),
+            backgroundColor: {
+                name: configData.backgroundColor.name,
+                colorKeys: configData.backgroundColor.colorKeys as CssColor[],
+                ratios: configData.backgroundColor.ratios
+            },
+            options: {
+                variant: 'light'
+            }
+        };
+
+        generateThemeFile(brandName, config);
     }
-    process.exit(1);
 });

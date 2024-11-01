@@ -12,15 +12,13 @@ export class ConfigError extends Error {
 
 export class ConfigLoader {
     private configPath: string;
-    private environment: string;
 
-    constructor(environment: string = 'development') {
-        this.configPath = path.join(process.cwd(), 'config');
-        this.environment = environment;
+    constructor() {
+        this.configPath = path.join(process.cwd(), 'src', 'config', 'brands');
     }
 
     public loadBrandConfig(brandName: string): Brand {
-        const configFile = path.join(this.configPath, this.environment, `${brandName}.json`);
+        const configFile = path.join(this.configPath, `${brandName}.json`);
         
         try {
             if (!fs.existsSync(configFile)) {
@@ -82,13 +80,11 @@ export class ConfigLoader {
     }
 
     public loadAllBrands(): Brand[] {
-        const envPath = path.join(this.configPath, this.environment);
-        
-        if (!fs.existsSync(envPath)) {
-            throw new Error(`No configurations found for environment: ${this.environment}`);
+        if (!fs.existsSync(this.configPath)) {
+            throw new Error('No brand configurations found');
         }
 
-        const files = fs.readdirSync(envPath)
+        const files = fs.readdirSync(this.configPath)
             .filter(file => file.endsWith('.json'));
 
         return files.map(file => {

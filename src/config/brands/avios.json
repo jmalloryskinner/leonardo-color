@@ -1,0 +1,16 @@
+{
+    "colors": [
+        {
+            "name": "accent",
+            "colorKeys": ["#5CDBFF", "#0000FF"],
+            "ratios": [3, 4.5, 7, 12, 19]
+        }
+    ],
+    "backgroundColor": {
+        "name": "neutral",
+        "colorKeys": ["#ffffff", "#F8F8FA", "#EEEDF2", "#F7E9E9", "#C0BFC9", "#AAA9B5", "#9593A0", "#807E8C", "#6C6A78", "#585663", "#45434F", "#000000"],
+        "ratios": [1, 1.04, 1.06, 1.18, 1.38, 2.02, 3.01, 4.87, 8.89, 14.98, 19.77, 21],
+        "colorspace": "RGB",
+        "smooth": true
+    }
+}

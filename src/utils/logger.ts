@@ -10,12 +10,12 @@ export const logger = createLogger({
     ),
     transports: [
         new transports.File({ 
-            filename: 'error.log', 
+            filename: 'logs/error.log', 
             level: 'error',
             handleExceptions: true
         }),
         new transports.File({ 
-            filename: 'combined.log',
+            filename: 'logs/combined.log',
             handleExceptions: true
         })
     ],

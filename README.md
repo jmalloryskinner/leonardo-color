@@ -1,182 +1,156 @@
 # Leonardo Color Theme Generator
 
-A TypeScript project for generating theme files using Adobe's Leonardo Color tools. This project generates accessible color themes with light and dark variants following a configurable schema.
+A type-safe theme generator built on top of Adobe's Leonardo Color, designed to create accessible color themes with support for light, dark, and dim variants.
 
 ## Features
 
-- Dynamic schema-based output structure
-- Multiple brand support via JSON configuration
-- Environment-specific configurations (development, production, staging)
-- Automatic light and dark theme generation
-- Type-safe configuration and output
-- Performance benchmarking and monitoring
-- Configurable property prefixes and naming
-- Robust error handling with custom error types
-- Comprehensive logging system using Winston
-- Environment-based configuration via dotenv
-- Color scale caching for improved performance
+- 🎨 **Dynamic Theme Generation**: Create color themes with multiple variants (light/dark/dim)
+- ♿ **Accessibility First**: Built-in contrast ratio validation and WCAG compliance
+- 🔄 **Flexible Output**: Configurable Design Token format
+- 🛡️ **Type Safety**: Full TypeScript support with strict type checking
+- ⚙️ **Customizable**: Extensible configuration system for properties and formats
+- 🧪 **Well Tested**: Comprehensive test suite with Jest
 
-## Setup
-
-1. Clone the repository
-2. Install dependencies:
+## Installation
 
 ```bash
-npm install
+npm install leonardo-color-theme-generator
 ```
 
-3. Create a `.env` file (optional):
+## Quick Start
 
-```env
-LOG_LEVEL=info
-SCHEMA_ROOT=alto,prim
-SCHEMA_COLOR_SCALE=colorScale
+1. Create a theme configuration:
+
+```typescript
+import { ThemeConfig } from 'leonardo-color-theme-generator';
+
+const config: ThemeConfig = {
+    colors: [{
+        name: 'primary',
+        colorKeys: ['#2D6BFF', '#1635FF'],
+        ratios: [3, 4.5, 7]
+    }],
+    backgroundColor: {
+        name: 'background',
+        colorKeys: ['#FFFFFF'],
+        ratios: [1]
+    }
+};
 ```
 
-## Project Structure
+2. Generate your theme:
 
-```
-project/
-├── config/              # Brand configurations
-│   ├── development/     # Development environment configs
-│   ├── production/      # Production environment configs
-│   └── staging/        # Staging environment configs
-├── src/
-│   ├── brands/         # Brand management
-│   ├── core/           # Core functionality
-│   │   └── settings/   # Configuration settings
-│   ├── schemas/        # Output schema configuration
-│   ├── scripts/        # Build scripts
-│   ├── services/       # Core services
-│   ├── types/          # TypeScript types
-│   └── utils/          # Utility functions
-├── dist/               # Generated output
-│   └── themes/         # Generated theme files
-└── logs/               # Application logs
+```typescript
+import { generateThemeFile } from 'leonardo-color-theme-generator';
+
+generateThemeFile('my-theme', config);
 ```
 
-## Usage
+## Output Format
 
-### Brand Configuration
-
-Create a brand configuration in `config/development/brand-name.json`:
+The generator creates a Design Tokens compatible JSON file:
 
 ```json
 {
-    "colors": [
-        {
-            "name": "accent",
-            "colorKeys": ["#5CDBFF", "#0000FF"],
-            "ratios": [3, 4.5, 7]
+  "design": {
+    "tokens": {
+      "colors": {
+        "primary": {
+          "100": {
+            "light": {
+              "$type": "color",
+              "$value": "#3f95ff",
+              "$description": "3:1 against background"
+            },
+            "dark": {
+              "$type": "color",
+              "$value": "#3162a1",
+              "$description": "3.4:1 against background"
+            }
+          }
         }
-    ],
-    "backgroundColor": {
-        "name": "neutral",
-        "colorKeys": ["#cacaca"],
-        "ratios": [2, 3, 4.5, 8, 12]
+      }
     }
+  }
 }
 ```
 
-### Generate Themes
+## Configuration
 
-Generate themes for all brands:
+### Theme Variants
+
+Configure different theme variants in `ThemeSettings.ts`:
+
+```typescript
+export const defaultThemes: ThemeConfig = {
+    variants: {
+        light: {
+            lightness: 100,
+            contrast: 1,
+            saturation: 100
+        },
+        dark: {
+            lightness: 0,
+            contrast: 1.2,
+            saturation: 90
+        }
+    },
+    defaultVariant: 'light'
+};
+```
+
+### Schema Configuration
+
+Customize the output format in `SchemaSettings.ts`:
+
+```typescript
+export const defaultSchema: SchemaConfig = {
+    root: ['design', 'tokens'],
+    colorScale: 'colors',
+    properties: {
+        order: ['type', 'value', 'description'],
+        config: {
+            // Property configurations
+        }
+    }
+};
+```
+
+## Environment Variables
+
+- `SCHEMA_ROOT`: Override the root path (comma-separated)
+- `SCHEMA_COLOR_SCALE`: Override the color scale key
+- `THEME_VARIANTS`: Override theme variant configurations (JSON)
+
+## Development
+
 ```bash
+# Install dependencies
+npm install
+
+# Run tests
+npm test
+
+# Build
+npm run build
+
+# Generate themes
 npm run generate
 ```
 
-### Development
+## Contributing
 
-Start the development server with watch mode:
-```bash
-npm run dev
-```
-
-Format code:
-```bash
-npm run format
-```
-
-Lint code:
-```bash
-npm run lint
-```
-
-### Testing
-
-Run tests:
-```bash
-npm test
-```
-
-Run tests in watch mode:
-```bash
-npm run test:watch
-```
-
-## Error Handling
-
-The application uses custom error types for better error handling:
-
-```typescript
-try {
-    const config = configLoader.loadBrandConfig('brand1');
-} catch (error) {
-    if (error instanceof ConfigError) {
-        logger.error(`Configuration error: ${error.message}`, { code: error.code });
-    }
-}
-```
-
-## Performance Monitoring
-
-The application includes performance benchmarking:
-
-```typescript
-const result = benchmark('Theme Generation', () => {
-    // Theme generation code
-});
-```
-
-Performance metrics are logged to `combined.log`.
-
-## Logging
-
-The application uses Winston for logging with different levels:
-
-```typescript
-logger.info('Processing theme', { brandName: 'example' });
-logger.error('Failed to load config', { error: 'File not found' });
-```
-
-Log files are generated in:
-- `error.log`: Error-level messages
-- `combined.log`: All log levels
-
-## Technologies
-
-- TypeScript 5.3
-- Jest for testing
-- ESM (ECMAScript Modules)
-- Node.js
-- Winston for logging
-- Dotenv for environment configuration
-- ESLint & Prettier for code quality
-- Husky for git hooks
-- @adobe/leonardo-contrast-colors
-
-## Scripts
-
-| Command | Description |
-|---------|-------------|
-| `npm run build` | Build the project |
-| `npm run dev` | Watch mode for development |
-| `npm test` | Run tests |
-| `npm run test:watch` | Run tests in watch mode |
-| `npm run generate` | Generate theme files |
-| `npm run lint` | Lint TypeScript files |
-| `npm run format` | Format code with Prettier |
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
 ## License
 
-MIT
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Acknowledgments
+
+- Built on [Adobe's Leonardo Color](https://github.com/adobe/leonardo)
+- Inspired by Design Tokens format

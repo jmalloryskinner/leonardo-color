@@ -2,12 +2,14 @@
 node_modules/
 
 # Build output
-dist/
+dist/*
+!dist/design-tokens/
+dist/design-tokens/*
+!dist/design-tokens/*.json
 
 # Logs
+logs/
 *.log
-error.log
-combined.log
 
 # Environment
 .env
