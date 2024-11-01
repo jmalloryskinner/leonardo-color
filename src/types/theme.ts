@@ -1,6 +1,11 @@
 import { Theme, Color, BackgroundColor, CssColor } from '@adobe/leonardo-contrast-colors';
 
-// Base color configuration
+/**
+ * Configuration for a single color in the theme
+ * @property name - Unique identifier for the color
+ * @property colorKeys - Array of hex color values defining the color scale
+ * @property ratios - Array of contrast ratios to generate
+ */
 export interface ColorConfig {
     name: string;
     colorKeys: CssColor[];

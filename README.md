@@ -10,6 +10,9 @@ A TypeScript project for generating theme files using Adobe's Leonardo Color too
 - Automatic light and dark theme generation
 - Type-safe configuration and output
 - Configurable property prefixes and naming
+- Robust error handling with custom error types
+- Comprehensive logging system using Winston
+- Environment-based configuration via dotenv
 
 ## Setup
 
@@ -19,6 +22,13 @@ A TypeScript project for generating theme files using Adobe's Leonardo Color too
 bash
 npm install
 
+3. Create a `.env` file (optional):
+
+env
+LOG_LEVEL=info
+SCHEMA_ROOT=alto,prim
+SCHEMA_COLOR_SCALE=colorScale
+```
 
 ## Project Structure
 
@@ -30,13 +40,16 @@ project/
 │   └── staging/        # Staging environment configs
 ├── src/
 │   ├── brands/         # Brand management
+│   ├── core/           # Core functionality
+│   │   └── settings/   # Configuration settings
 │   ├── schemas/        # Output schema configuration
 │   ├── scripts/        # Build scripts
 │   ├── services/       # Core services
 │   ├── types/          # TypeScript types
 │   └── utils/          # Utility functions
-└── dist/               # Generated output
-    └── themes/         # Generated theme files
+├── dist/               # Generated output
+│   └── themes/         # Generated theme files
+└── logs/               # Application logs
 ```
 
 ## Usage
@@ -49,15 +62,15 @@ Create a brand configuration in `config/development/brand-name.json`:
 {
     "colors": [
         {
-            "name": "blue",
+            "name": "accent",
             "colorKeys": ["#5CDBFF", "#0000FF"],
             "ratios": [3, 4.5, 7]
         }
     ],
     "backgroundColor": {
-        "name": "gray",
+        "name": "neutral",
         "colorKeys": ["#cacaca"],
-        "ratios": [2, 3, 4.5, 8]
+        "ratios": [2, 3, 4.5, 8, 12]
     }
 }
 ```
@@ -66,74 +79,64 @@ Create a brand configuration in `config/development/brand-name.json`:
 
 Generate themes for all brands:
 ```bash
-npm run generate:brands
+npm run generate
 ```
 
-Generate themes for specific environments:
+### Development
+
+Start the development server with watch mode:
 ```bash
-npm run generate:brands:prod    # Production
-npm run generate:brands:staging # Staging
+npm run dev
 ```
 
-### Output Structure
+Format code:
+```bash
+npm run format
+```
 
-Themes are generated following the schema:
-```json
-{
-  "alto": {
-    "prim": {
-      "colorScale": {
-        "blue": {
-          "100": {
-            "light": {
-              "$value": "#5CDBFF",
-              "$type": "color",
-              "$description": "3:1 against background"
-            },
-            "dark": {
-              "$value": "#0000FF",
-              "$type": "color",
-              "$description": "3:1 against background"
-            }
-          }
-        }
-      }
+Lint code:
+```bash
+npm run lint
+```
+
+### Testing
+
+Run tests:
+```bash
+npm test
+```
+
+Run tests in watch mode:
+```bash
+npm run test:watch
+```
+
+## Error Handling
+
+The application uses custom error types for better error handling:
+
+```typescript
+try {
+    const config = configLoader.loadBrandConfig('brand1');
+} catch (error) {
+    if (error instanceof ConfigError) {
+        logger.error(`Configuration error: ${error.message}`, { code: error.code });
     }
-  }
 }
 ```
 
-## Development
+## Logging
 
-Start the development server with watch mode:
+The application uses Winston for logging with different levels:
 
-bash
-npm run dev
+```typescript
+logger.info('Processing theme', { brandName: 'example' });
+logger.error('Failed to load config', { error: 'File not found' });
+```
 
-
-## Testing
-
-Run tests:
-
-bash
-npm test
-
-
-Run tests in watch mode:
-
-bash
-npm run test:watch
-
-
-## Building
-
-Build the project:
-
-bash
-npm run build
-
-
-The compiled output will be in the `dist` directory.
+Log files are generated in:
+- `error.log`: Error-level messages
+- `combined.log`: All log levels
 
 ## Technologies
 
@@ -141,6 +144,10 @@ The compiled output will be in the `dist` directory.
 - Jest for testing
 - ESM (ECMAScript Modules)
 - Node.js
+- Winston for logging
+- Dotenv for environment configuration
+- ESLint & Prettier for code quality
+- Husky for git hooks
 - @adobe/leonardo-contrast-colors
 
 ## Scripts
@@ -151,9 +158,9 @@ The compiled output will be in the `dist` directory.
 | `npm run dev` | Watch mode for development |
 | `npm test` | Run tests |
 | `npm run test:watch` | Run tests in watch mode |
-| `npm run generate:brands` | Generate theme files for all brands |
-| `npm run generate:brands:prod` | Generate production theme files |
-| `npm run generate:brands:staging` | Generate staging theme files |
+| `npm run generate` | Generate theme files |
+| `npm run lint` | Lint TypeScript files |
+| `npm run format` | Format code with Prettier |
 
 ## License
 

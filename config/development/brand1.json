@@ -9,6 +9,6 @@
     "backgroundColor": {
         "name": "neutral",
         "colorKeys": ["#cacaca"],
-        "ratios": [2, 3, 4.5, 8]
+        "ratios": [2, 3, 4.5, 8, 12]
     }
 }
