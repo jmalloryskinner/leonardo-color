@@ -61,7 +61,9 @@ describe('ThemeGenerator', () => {
                     colorKeys: ['#ffffff'] as CssColor[],
                     ratios: [2]
                 },
-                lightness: 100
+                options: {
+                    variant: 'light'
+                }
             };
 
             const result = generator.generateTheme(config);
@@ -86,7 +88,9 @@ describe('ThemeGenerator', () => {
                     colorKeys: ['#ffffff'] as CssColor[],
                     ratios: [2]
                 },
-                lightness: 100
+                options: {
+                    variant: 'light'
+                }
             };
 
             expect(() => generator.generateTheme(config))
