@@ -9,22 +9,25 @@ A TypeScript project for generating theme files using Adobe's Leonardo Color too
 - Environment-specific configurations (development, production, staging)
 - Automatic light and dark theme generation
 - Type-safe configuration and output
+- Performance benchmarking and monitoring
 - Configurable property prefixes and naming
 - Robust error handling with custom error types
 - Comprehensive logging system using Winston
 - Environment-based configuration via dotenv
+- Color scale caching for improved performance
 
 ## Setup
 
 1. Clone the repository
 2. Install dependencies:
 
-bash
+```bash
 npm install
+```
 
 3. Create a `.env` file (optional):
 
-env
+```env
 LOG_LEVEL=info
 SCHEMA_ROOT=alto,prim
 SCHEMA_COLOR_SCALE=colorScale
@@ -124,6 +127,18 @@ try {
     }
 }
 ```
+
+## Performance Monitoring
+
+The application includes performance benchmarking:
+
+```typescript
+const result = benchmark('Theme Generation', () => {
+    // Theme generation code
+});
+```
+
+Performance metrics are logged to `combined.log`.
 
 ## Logging
 

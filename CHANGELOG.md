@@ -1,5 +1,25 @@
 # Changelog
 
+## [1.0.2] - 2024-03-15
+
+### Added
+- Performance benchmarking for theme generation
+- Comprehensive type safety improvements
+- New ColorScaleData interface for better type checking
+- Enhanced test coverage with schema validation
+
+### Changed
+- Improved theme generation output structure
+- Updated error handling with custom error types
+- Refactored ThemeGenerator for better maintainability
+- Enhanced configuration validation
+
+### Fixed
+- Theme output schema structure
+- Type safety in test files
+- Color scale generation and caching
+- Configuration loader type safety
+
 ## [1.0.1] - 2024-03-14
 
 ### Added
