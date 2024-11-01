@@ -63,10 +63,9 @@ export interface PropertyConfigMap {
  * Complete schema configuration for theme generation
  */
 export interface SchemaConfig {
-    /** Root path in the output JSON [design, tokens] */
-    root: [string, string];
-    /** Key for the color scale in the output */
-    colorScale: string;
+    /** Root path array for nested structure */
+    root: string[];
+    /** Configuration for token properties */
     properties: {
         /** Order of properties in the output */
         order: PropertyKey[];
@@ -89,8 +88,7 @@ const formatters = {
  * Follows Design Tokens format
  */
 export const defaultSchema: SchemaConfig = {
-    root: ['design', 'tokens'],
-    colorScale: 'colors',
+    root: ['alto', 'prim', 'colorScale'],
     properties: {
         order: ['type', 'value', 'description'],
         config: {

@@ -35,7 +35,6 @@ export class SettingsManager {
 
     /**
      * Returns the current schema configuration
-     * Used for generating theme token structure
      */
     public getSchema(): SchemaConfig {
         return this.schema;
@@ -43,7 +42,6 @@ export class SettingsManager {
 
     /**
      * Returns the current theme configuration
-     * Contains all theme variants and their settings
      */
     public getThemes(): ThemeConfig {
         return this.themes;
@@ -51,7 +49,6 @@ export class SettingsManager {
 
     /**
      * Gets configuration for a specific theme variant
-     * Falls back to default variant if specified variant doesn't exist
      * @param variant - The theme variant to get configuration for
      */
     public getThemeVariant(variant: ThemeVariantType): ThemeVariantConfig {
@@ -61,24 +58,20 @@ export class SettingsManager {
 
     /**
      * Loads configuration from environment variables
-     * Allows runtime customization of schema and theme settings
      * @private
      */
     private loadEnvironmentConfig(): void {
-        // Load schema root from environment or use default
+        // Load root path from environment
         const rootFromEnv = process.env.SCHEMA_ROOT?.split(',') || defaultSchema.root;
-        const root: [string, string] = rootFromEnv.length === 2 
-            ? [rootFromEnv[0], rootFromEnv[1]]
-            : defaultSchema.root;
-
+        
         // Update schema with environment values
         this.schema = {
             ...defaultSchema,
-            root,
-            colorScale: process.env.SCHEMA_COLOR_SCALE || defaultSchema.colorScale
+            root: rootFromEnv,  // Use the entire array as root
+            properties: defaultSchema.properties
         };
 
-        // Load and validate theme overrides from environment
+        // Load and validate theme overrides
         const themeOverrides = process.env.THEME_VARIANTS ? 
             JSON.parse(process.env.THEME_VARIANTS) as Partial<Record<ThemeVariantType, ThemeVariantConfig>> : {};
 

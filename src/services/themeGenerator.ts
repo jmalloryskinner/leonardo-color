@@ -220,62 +220,26 @@ export class ThemeGenerator {
      */
     public saveThemeToFile(themeName: string, themeData: ThemeOutput): void {
         const tokensPath = path.join(process.cwd(), this.#outputDir, DESIGN_TOKENS_DIRECTORY);
-        
-        if (!fs.existsSync(tokensPath)) {
-            fs.mkdirSync(tokensPath, { recursive: true });
-        }
+        fs.mkdirSync(tokensPath, { recursive: true });
 
-        const { root, colorScale, properties } = this.#settings.getSchema();
+        const { root } = this.#settings.getSchema();
         const themes = this.#settings.getThemes();
         
-        // Transform ContrastColors to the expected schema format
-        const colorScaleData: Record<string, Record<string, Record<string, Record<string, string>>>> = {};
-        const { colors: lightColors } = themeData;
+        // Get variants from theme data
+        const variants = Object.entries(themes.variants)
+            .filter(([name]) => name !== themes.defaultVariant)
+            .reduce((acc, [name]) => ({
+                ...acc,
+                [name]: themeData.colors
+            }), {});
         
-        // Skip the background color (first element)
-        const colors = lightColors.slice(1).filter((color): color is ContrastColor => 'values' in color);
-        const darkConfig: ThemeConfig = {
-            colors: colors.map(color => ({
-                name: color.name,
-                colorKeys: [color.values[0].value],
-                ratios: color.values.map(v => v.contrast)
-            })),
-            backgroundColor: {
-                name: 'background',
-                colorKeys: [lightColors[0].background],
-                ratios: [1]
-            },
-            options: { variant: 'dark' }
-        };
+        // Format the color data
+        const colorData = this.formatOutput(themeData.colors, variants);
         
-        const darkTheme = this.createThemeVariant(
-            this.generateColorSet(darkConfig),
-            themes.variants.dark
-        );
-        const darkColors = darkTheme.contrastColors.slice(1) as ContrastColor[];
-        
-        colors.forEach((color, colorIndex) => {
-            const darkColor = darkColors[colorIndex];
-            colorScaleData[color.name] = {};
-            
-            color.values.forEach((value, index) => {
-                const step = ((index + 1) * 100).toString();
-                const variants = {
-                    light: this.formatColorValue(value, properties),
-                    dark: this.formatColorValue(darkColor.values[index], properties)
-                };
-                colorScaleData[color.name][step] = variants;
-            });
-        });
-
-        // Create the final output structure using schema config
-        const outputData = {
-            [root[0]]: {
-                [root[1]]: {
-                    [colorScale]: colorScaleData
-                }
-            }
-        };
+        // Create nested structure dynamically from root array
+        const outputData = root.reduceRight((acc, key, index) => ({
+            [key]: index === root.length - 1 ? colorData : acc
+        }), {});
 
         fs.writeFileSync(
             path.join(tokensPath, `${themeName}.json`),

@@ -1,6 +1,6 @@
 {
-  "design": {
-    "tokens": {
+  "alto": {
+    "prim": {
       "colors": {
         "accent": {
           "100": {
