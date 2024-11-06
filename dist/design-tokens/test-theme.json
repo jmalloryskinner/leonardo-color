@@ -39,8 +39,8 @@
             },
             "dark": {
               "$type": "color",
-              "$value": "#616161",
-              "$description": "3.4:1 against background"
+              "$value": "#5d5d5d",
+              "$description": "3.2:1 against background"
             }
           },
           "200": {
@@ -51,8 +51,8 @@
             },
             "dark": {
               "$type": "color",
-              "$value": "#7e7e7e",
-              "$description": "5.2:1 against background"
+              "$value": "#797979",
+              "$description": "4.85:1 against background"
             }
           }
         }

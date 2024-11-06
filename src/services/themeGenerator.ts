@@ -55,12 +55,32 @@ export class ThemeGenerator {
         });
     }
 
+    private validateColorspace(colorspace: string | undefined): InterpolationColorspace {
+        const validColorspaces = ['CAM02', 'CAM02p', 'LCH', 'LAB', 'HSL', 'HSLuv', 'HSV', 'RGB'] as const;
+        type ValidColorspace = typeof validColorspaces[number];
+        const defaultColorspace = 'LAB' as ValidColorspace;
+
+        if (!colorspace) return defaultColorspace;
+        
+        const normalizedColorspace = colorspace.toUpperCase();
+        if (validColorspaces.includes(normalizedColorspace as ValidColorspace)) {
+            return normalizedColorspace as ValidColorspace;
+        }
+
+        logger.warn('Invalid colorspace specified, using default', {
+            specified: colorspace,
+            default: defaultColorspace,
+            valid: validColorspaces.join(', ')
+        });
+        return defaultColorspace;
+    }
+
     private createColors(colorConfigs: ColorConfig[]): Color[] {
         return colorConfigs.map(config => new Color({
             name: config.name,
             colorKeys: config.colorKeys,
             ratios: config.ratios,
-            colorspace: (config.colorspace || 'LAB') as InterpolationColorspace,
+            colorspace: this.validateColorspace(config.colorspace),
             smooth: config.smooth || true,
             output: 'HEX'
         }));
@@ -71,7 +91,7 @@ export class ThemeGenerator {
             name: config.name,
             colorKeys: config.colorKeys,
             ratios: config.ratios,
-            colorspace: (config.colorspace || 'LAB') as InterpolationColorspace,
+            colorspace: this.validateColorspace(config.colorspace),
             smooth: config.smooth || true,
             output: 'HEX'
         });
@@ -96,7 +116,7 @@ export class ThemeGenerator {
             fs.mkdirSync(tokensPath, { recursive: true });
 
             const outputPath = path.join(tokensPath, `${themeName}.json`);
-            const outputData = this.formatThemeOutput(themeData);
+            const outputData = this.formatThemeOutput(themeData, themeName);
 
             fs.writeFileSync(
                 outputPath,
@@ -110,7 +130,7 @@ export class ThemeGenerator {
         }
     }
 
-    private formatThemeOutput(themeData: ThemeOutput): unknown {
+    private formatThemeOutput(themeData: ThemeOutput, brandName: string): unknown {
         // Get schema configuration
         const { root } = this.#settings.getSchema();
 
@@ -223,10 +243,13 @@ export class ThemeGenerator {
 
         // Build output structure dynamically based on schema root
         return root.reduceRight((acc, key, index) => {
+            // Handle brandName placeholder
+            const processedKey = key === '{brandName}' ? brandName : key;
+                
             if (index === root.length - 1) {
-                return { [key]: colorScales };
+                return { [processedKey]: colorScales };
             }
-            return { [key]: acc };
+            return { [processedKey]: acc };
         }, {} as Record<string, unknown>);
     }
 }

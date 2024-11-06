@@ -1,49 +1,67 @@
 {
     "colors": [
         {
-            "name": "accent",
-            "colorKeys": ["#5CDBFF", "#0000FF"],
-            "ratios": [3, 4.5, 7, 12, 19]
+            "name": "blue",
+            "colorKeys": ["#E5F2FF","#76B0FF","#407DFF", "#427CFE", "#0032A0","#011DAC", "#001E62"],
+            "ratios": [1.14, 1.34, 1.59, 1.92, 2.23, 3.79, 5.07, 6.72, 8.84, 10.69, 13.94, 15.46],
+            "colorspace": "RGB",
+            "smooth": true
+        },
+        {
+            "name": "pink",
+            "colorKeys": ["#F7E9E9", "#E88094", "#E85B7D", "#C74369", "#A63556", "#861F42", "#861F42"],
+            "ratios": [1.14, 1.34, 1.59, 1.92, 2.23, 3.37, 5.08, 6.72, 8.84, 10.69, 13.94, 15.46, 17, 19],
+            "colorspace": "RGB",
+            "smooth": true
         },
         {
             "name": "red",
-            "colorKeys": ["#FF0000"],
-            "ratios": [3, 4.5, 7, 12, 19]
+            "colorKeys": ["#FDE8E8", "#F8C1C1", "#F39494", "#E34D4D", "#C73030", "#A11F1F"],
+            "ratios": [1.14, 1.34, 1.59, 1.92, 2.23, 3.37, 5.08, 6.72, 8.84, 10.69, 13.94, 15.46, 17, 19],
+            "colorspace": "RGB",
+            "smooth": true
+        },
+        {
+            "name": "peach",
+            "colorKeys": ["#ffdfcf", "#F6CAB2", "#f2b191", "#E39A7F", "#D98263", "#B35C40", "#8A4335"],
+            "ratios": [1.08, 1.26, 1.33, 1.5, 1.83, 2.28, 3.01, 4.64, 5.1, 6.72, 8.84, 11.31, 17, 19],
+            "colorspace": "RGB",
+            "smooth": true
+        },
+        {
+            "name": "orange",
+            "colorKeys": ["#FEF5E7", "#FEE7C7", "#FDDAA9", "#BC4A08", "#9E3D07", "#813106"],
+            "ratios": [1.08, 1.2, 1.33, 1.58, 1.92, 2.39, 3.01, 3.87, 5.1, 6.72, 8.84, 11.31, 17, 19],
+            "colorspace": "RGB",
+            "smooth": true
+        },
+        {
+            "name": "yellow",
+            "colorKeys": ["#FFFCEB", "#FFF7CE", "#FFF4B9", "#FFE600", "#EAD300", "#D1AA00"],
+            "ratios": [1.02, 1.07, 1.11, 1.16, 1.21, 1.27, 1.35, 1.52, 1.65, 2.16, 3.51, 4.67, 6.49, 9.4, 17, 19],
+            "colorspace": "RGB",
+            "smooth": true
         },
         {
             "name": "green",
-            "colorKeys": ["#00FF00"],
-            "ratios": [3, 4.5, 7, 12, 19],
-            "colorspace": "LAB",
+            "colorKeys": ["#c7fcec", "#0ABF87", "#00a173"],
+            "ratios": [1.13, 1.2, 1.33, 1.58, 1.92, 2.38, 3.31, 3.87, 5.07, 6.72, 8.84, 11.31, 17, 19],
+            "colorspace": "RGB",
             "smooth": true
-        },
-        {
-            "name": "blue",
-            "colorKeys": ["#0000FF"],
-            "ratios": [3, 4.5, 7, 12, 19],
-            "colorspace": "LAB",
-            "smooth": true
-        },
+        }, 
         {
             "name": "purple",
-            "colorKeys": ["#800080", "#4B0082"],
-            "ratios": [3, 4.5, 7, 12, 19],
-            "colorspace": "LAB",
-            "smooth": true
-        },
-        {
-            "name": "warning",
-            "colorKeys": ["#FFA500"],
-            "ratios": [3, 4.5, 7, 12, 19],
-            "colorspace": "LAB",
+            "colorKeys": ["#a099ff", "#B4B2FF", "#e0deff"],
+            "ratios": [1.08, 1.2, 1.31, 1.58, 1.95, 2.47, 3.01, 3.87, 5.07, 6.72, 8.84, 11.31, 17, 19],
+            "colorspace": "RGB",
             "smooth": true
         }
     ],
     "backgroundColor": {
         "name": "neutral",
-        "colorKeys": ["#ffffff", "#F8F8FA", "#EEEDF2", "#F7E9E9", "#C0BFC9", "#AAA9B5", "#9593A0", "#807E8C", "#6C6A78", "#585663", "#45434F", "#000000"],
+        "colorKeys": ["#ffffff", "#E6E8F7", "#A8B3CA", "#808EB1", "#475F82", "#334259"],
         "ratios": [1, 1.04, 1.06, 1.18, 1.38, 2.02, 3.01, 4.87, 8.89, 14.98, 19.77, 21],
-        "colorspace": "RGB",
+        "colorspace": "HSLuv",
         "smooth": true
     }
 }

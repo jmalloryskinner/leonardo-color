@@ -47,8 +47,8 @@ export const defaultThemes: ThemeConfig = {
         },
         dark: {
             lightness: 0,    // Minimum lightness for dark theme
-            contrast: 1.2,   // Increased contrast for better readability
-            saturation: 90   // Slightly reduced saturation
+            contrast: 1.1,   // Increased contrast for better readability
+            saturation: 100   // Slightly reduced saturation
         }
     },
     defaultVariant: 'light'

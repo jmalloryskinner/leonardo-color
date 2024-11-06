@@ -88,7 +88,7 @@ const formatters = {
  * Follows Design Tokens format
  */
 export const defaultSchema: SchemaConfig = {
-    root: ['alto', 'prim', 'colorScale'],
+    root: ['alto', 'prim', '{brandName}', 'color'],
     properties: {
         order: ['type', 'value', 'description'],
         config: {
